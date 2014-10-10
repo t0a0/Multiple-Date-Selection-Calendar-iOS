@@ -15,7 +15,7 @@
 {
     [super viewDidLoad];
     NSCalendar* cal = [NSCalendar currentCalendar];
-    FIMultipleSelectionCalendarView* view = [[FIMultipleSelectionCalendarView alloc]initWithFrame:self.view.frame calendar:cal];
+    FIMultipleSelectionCalendarView* view = [[FIMultipleSelectionCalendarView alloc]initWithFrame:self.view.frame calendar:cal singleSelectionOnly:YES];
     view.calViewDelegate = self;
     [self.view addSubview:view];
     

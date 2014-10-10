@@ -31,10 +31,12 @@
 @interface FIMultipleSelectionCalendarView : UICollectionView
 
 -(instancetype)initWithFrame:(CGRect)frame
-                    calendar:(NSCalendar*)calendar;
+                    calendar:(NSCalendar*)calendar
+         singleSelectionOnly:(BOOL)singleSelection;
 
 @property (weak,nonatomic) id <FIMultipleSelectionCalendarViewDelegate> calViewDelegate;
 
+@property (nonatomic, getter=isSingleSelection) BOOL singleSelection;
 -(NSDate*)currentFirstDate;
 -(NSDate*)currentLastDate;
 
@@ -55,6 +57,9 @@
 
 
 @property (strong,nonatomic) NSMutableSet* selectedDates;
-@property (strong,nonatomic) NSMutableDictionary* markedDates;//keys: 0,1,2,3 - mark types, values - sets of dates
+@property (strong,nonatomic) NSMutableDictionary* markedDates;//keys: 0,1,2,3 - mark types, values - mutable sets of dates
+
+-(NSDate*)clearDateFromhhmmss:(NSDate*)date;
 
 @end
+

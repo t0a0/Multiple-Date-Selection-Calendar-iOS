@@ -49,6 +49,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 }
 -(instancetype)initWithFrame:(CGRect)frame
                     calendar:(NSCalendar*)calendar
+         singleSelectionOnly:(BOOL)singleSelection
 {
     FIMultipleSelectionCalendarViewFlowLayout* flow =[[FIMultipleSelectionCalendarViewFlowLayout alloc]initWithCollectionViewSize:frame.size];
     if(self = [self initWithFrame:frame collectionViewLayout:flow])
@@ -58,19 +59,21 @@ static NSString* viewReuseID_Header = @"headerReuseID";
         self.backgroundColor = calendar_BackgroundColor;
         [self registerClass:[FIMultipleSelectionCalendarViewCell class] forCellWithReuseIdentifier:cellReuseID_DayCell];
         [self registerClass:[FIMultipleSelectionCalendarViewHeader class] forSupplementaryViewOfKind:UICollectionElementKindSectionHeader withReuseIdentifier:viewReuseID_Header];
+        self.singleSelection = singleSelection;
         self.selectedDates = [NSMutableSet new];
         self.markedDates = [NSMutableDictionary new];
         self.calendar = calendar;
         self.monthsSections = [NSMutableArray new];
-        NSDateComponents* nowDateComponents = [calendar components:calendarUnitComponents fromDate:[NSDate date]];
-        self.todayDate = [self.calendar dateFromComponents:nowDateComponents];
+        NSDate* nowDate = [NSDate date];
+        NSDateComponents* nowDateComponents = [calendar components:calendarUnitComponents fromDate:nowDate];
+        self.todayDate = [self clearDateFromhhmmss:nowDate];
         NSDateComponents* comps = [[NSDateComponents alloc]init];
         [comps setYear:nowDateComponents.year];
         for (NSInteger i = nowDateComponents.month ; i < nowDateComponents.month + 1; i ++)
         {
             [comps setMonth:i];
             [comps setDay:1];
-
+            
             NSDate* date = [calendar dateFromComponents:comps];
             NSRange range = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
             NSDateComponents* weekDayComp = [calendar components:calendarUnitComponents fromDate:date];
@@ -114,9 +117,8 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 #pragma mark - Time change notification
 -(void)significantTimeChangedOccured:(NSNotification*)sender
 {
-    NSDateComponents* nowDateComponents = [self.calendar components:calendarUnitComponents fromDate:[NSDate date]];
     NSIndexPath* path1 = [self indexPathForDate:self.todayDate];
-    self.todayDate = [self.calendar dateFromComponents:nowDateComponents];
+    self.todayDate = [self clearDateFromhhmmss:[NSDate date]];
     NSIndexPath* path2 = [self indexPathForDate:self.todayDate];
     NSMutableArray* array = [NSMutableArray new];
     if(path1)
@@ -222,6 +224,10 @@ static NSString* viewReuseID_Header = @"headerReuseID";
                 BOOL select = [self.calViewDelegate calendarView:self shouldSelectDate:selectedDate];
                 if(select)
                 {
+                    if(self.singleSelection)
+                    {
+                        [self unselectDates:self.selectedDates];
+                    }
                     [self.selectedDates addObject:selectedDate];
                     [collectionView reloadItemsAtIndexPaths:@[indexPath]];
                 }
@@ -281,7 +287,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 //- (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout *)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 //{
 //    CGFloat itemWidth = floorf(CGRectGetWidth(self.bounds) / 7);
-//    
+//
 //    return CGSizeMake(itemWidth, itemWidth*1.25);
 //}
 #pragma mark - Scroll View delegate
@@ -366,40 +372,55 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 }
 
 #pragma mark - public methods
+-(NSDate*)clearDateFromhhmmss:(NSDate *)date
+{
+    NSDateComponents* dateToSelectComps = [self.calendar components:calendarUnitComponents fromDate:date];
+    return [self.calendar dateFromComponents:dateToSelectComps];
+}
 #pragma mark - Select dates
 -(void)selectDate:(NSDate*)date
 {
-    NSDateComponents* dateToSelectComps = [self.calendar components:calendarUnitComponents fromDate:date];
-    NSDate* dateToSelect = [self.calendar dateFromComponents:dateToSelectComps];
+    if(self.singleSelection)
+    {
+        [self unselectDates:self.selectedDates];
+    }
+    NSDate* dateToSelect = [self clearDateFromhhmmss:date];
     [self.selectedDates addObject:dateToSelect];
     [self reloadItemsWithDates:@[dateToSelect]];
 }
 -(void)selectDates:(NSSet*)dates
 {
     NSMutableArray* datesToUpdate = [NSMutableArray new];
-    for (NSDate* dateToSelect in dates.allObjects)
+    if(self.singleSelection)
     {
-        NSDateComponents* dateToSelectComps = [self.calendar components:calendarUnitComponents fromDate:dateToSelect];
-        NSDate* dateToSelect = [self.calendar dateFromComponents:dateToSelectComps];
-        [self.selectedDates addObject:dateToSelect];
-        [datesToUpdate addObject:dateToSelect];
+        [self unselectDates:self.selectedDates];
+        NSDate* dateToUPD = dates.anyObject;
+        [self selectDate:dateToUPD];
+        [datesToUpdate addObject:dateToUPD];
+    }
+    else
+    {
+        for (NSDate* date in dates.allObjects)
+        {
+            NSDate* dateToSelect = [self clearDateFromhhmmss:date];
+            [self.selectedDates addObject:dateToSelect];
+            [datesToUpdate addObject:dateToSelect];
+        }
     }
     [self reloadItemsWithDates:datesToUpdate];
 }
 -(void)unselectDate:(NSDate*)date
 {
-    NSDateComponents* comps = [self.calendar components:calendarUnitComponents fromDate:date];
-    NSDate* dateFromComps = [self.calendar dateFromComponents:comps];
+    NSDate* dateFromComps = [self clearDateFromhhmmss:date];
     [self.selectedDates removeObject:dateFromComps];
     [self reloadItemsWithDates:@[dateFromComps]];
 }
 -(void)unselectDates:(NSSet*)dates
 {
     NSMutableArray* datesToUpdate = [NSMutableArray new];
-    for (NSDate* dateToSelect in dates.allObjects)
+    for (NSDate* date in dates.allObjects)
     {
-        NSDateComponents* dateToSelectComps = [self.calendar components:calendarUnitComponents fromDate:dateToSelect];
-        NSDate* dateToSelect = [self.calendar dateFromComponents:dateToSelectComps];
+        NSDate* dateToSelect = [self clearDateFromhhmmss:date];
         [self.selectedDates removeObject:dateToSelect];
         [datesToUpdate addObject:dateToSelect];
     }
@@ -415,8 +436,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
         newSet = [NSMutableSet new];
         [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
     }
-    NSDateComponents* dateToSelectComps = [self.calendar components:calendarUnitComponents fromDate:date];
-    NSDate* dateToSelect = [self.calendar dateFromComponents:dateToSelectComps];
+    NSDate* dateToSelect = [self clearDateFromhhmmss:date];
     [newSet addObject:dateToSelect];
     [self reloadItemsWithDates:@[dateToSelect]];
 }
@@ -430,10 +450,9 @@ static NSString* viewReuseID_Header = @"headerReuseID";
         [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
     }
     NSMutableArray* datesToUpdate = [NSMutableArray new];
-    for (NSDate* dateToSelect in dates.allObjects)
+    for (NSDate* date in dates.allObjects)
     {
-        NSDateComponents* dateToSelectComps = [self.calendar components:calendarUnitComponents fromDate:dateToSelect];
-        NSDate* dateToSelect = [self.calendar dateFromComponents:dateToSelectComps];
+        NSDate* dateToSelect = [self clearDateFromhhmmss:date];
         [newSet addObject:dateToSelect];
         [datesToUpdate addObject:dateToSelect];
     }
@@ -441,8 +460,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 }
 -(void)unmarkDate:(NSDate *)date
 {
-    NSDateComponents* comps = [self.calendar components:calendarUnitComponents fromDate:date];
-    NSDate* dateFromComps = [self.calendar dateFromComponents:comps];
+    NSDate* dateFromComps = [self clearDateFromhhmmss:date];
     for(NSString* key in self.markedDates.allKeys)
     {
         NSMutableSet* set = self.markedDates[key];
@@ -453,10 +471,9 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 -(void)unmarkDates:(NSSet *)dates
 {
     NSMutableArray* datesToUpdate = [NSMutableArray new];
-    for (NSDate* dateToSelect in dates.allObjects)
+    for (NSDate* date in dates.allObjects)
     {
-        NSDateComponents* dateToSelectComps = [self.calendar components:calendarUnitComponents fromDate:dateToSelect];
-        NSDate* dateToSelect = [self.calendar dateFromComponents:dateToSelectComps];
+        NSDate* dateToSelect = [self clearDateFromhhmmss:date];
         for(NSString* key in self.markedDates.allKeys)
         {
             NSMutableSet* set = self.markedDates[key];
@@ -595,4 +612,5 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 {
     return [NSString stringWithFormat:@"%ld",(long)markType];
 }
+
 @end

@@ -8,12 +8,16 @@
 
 /* Begin PBXBuildFile section */
 		16350E4319E81E050028F527 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E4219E81E050028F527 /* main.m */; };
-		16350E4619E81E050028F527 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E4519E81E050028F527 /* AppDelegate.m */; };
-		16350E4919E81E050028F527 /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E4819E81E050028F527 /* ViewController.m */; };
-		16350E4C19E81E050028F527 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16350E4A19E81E050028F527 /* Main.storyboard */; };
 		16350E4E19E81E050028F527 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 16350E4D19E81E050028F527 /* Images.xcassets */; };
 		16350E5119E81E050028F527 /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 16350E4F19E81E050028F527 /* LaunchScreen.xib */; };
 		16350E5D19E81E050028F527 /* FIMultipleSelectionCalendarDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E5C19E81E050028F527 /* FIMultipleSelectionCalendarDemoTests.m */; };
+		16350E7419E81E190028F527 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E6719E81E190028F527 /* AppDelegate.m */; };
+		16350E7519E81E190028F527 /* VC.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E6919E81E190028F527 /* VC.m */; };
+		16350E7619E81E190028F527 /* FIMultipleSelectionCalendarView.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E6C19E81E190028F527 /* FIMultipleSelectionCalendarView.m */; };
+		16350E7719E81E190028F527 /* FIMultipleSelectionCalendarViewHeader.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E6E19E81E190028F527 /* FIMultipleSelectionCalendarViewHeader.m */; };
+		16350E7819E81E190028F527 /* FIMultipleSelectionCalendarViewFlowLayout.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E7019E81E190028F527 /* FIMultipleSelectionCalendarViewFlowLayout.m */; };
+		16350E7919E81E190028F527 /* FIMultipleSelectionCalendarViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 16350E7219E81E190028F527 /* FIMultipleSelectionCalendarViewCell.m */; };
+		16350E7A19E81E190028F527 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 16350E7319E81E190028F527 /* Main.storyboard */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,16 +34,25 @@
 		16350E3D19E81E050028F527 /* FIMultipleSelectionCalendarDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FIMultipleSelectionCalendarDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		16350E4119E81E050028F527 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16350E4219E81E050028F527 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
-		16350E4419E81E050028F527 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
-		16350E4519E81E050028F527 /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
-		16350E4719E81E050028F527 /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
-		16350E4819E81E050028F527 /* ViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = ViewController.m; sourceTree = "<group>"; };
-		16350E4B19E81E050028F527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		16350E4D19E81E050028F527 /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		16350E5019E81E050028F527 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		16350E5619E81E050028F527 /* FIMultipleSelectionCalendarDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = FIMultipleSelectionCalendarDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		16350E5B19E81E050028F527 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		16350E5C19E81E050028F527 /* FIMultipleSelectionCalendarDemoTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = FIMultipleSelectionCalendarDemoTests.m; sourceTree = "<group>"; };
+		16350E6619E81E190028F527 /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Demo/AppDelegate.h; sourceTree = "<group>"; };
+		16350E6719E81E190028F527 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Demo/AppDelegate.m; sourceTree = "<group>"; };
+		16350E6819E81E190028F527 /* VC.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = VC.h; path = Demo/VC.h; sourceTree = "<group>"; };
+		16350E6919E81E190028F527 /* VC.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = VC.m; path = Demo/VC.m; sourceTree = "<group>"; };
+		16350E6A19E81E190028F527 /* FIMultipleSelectionCalendar.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIMultipleSelectionCalendar.h; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendar.h; sourceTree = "<group>"; };
+		16350E6B19E81E190028F527 /* FIMultipleSelectionCalendarView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIMultipleSelectionCalendarView.h; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendarView.h; sourceTree = "<group>"; };
+		16350E6C19E81E190028F527 /* FIMultipleSelectionCalendarView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIMultipleSelectionCalendarView.m; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendarView.m; sourceTree = "<group>"; };
+		16350E6D19E81E190028F527 /* FIMultipleSelectionCalendarViewHeader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIMultipleSelectionCalendarViewHeader.h; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendarViewHeader.h; sourceTree = "<group>"; };
+		16350E6E19E81E190028F527 /* FIMultipleSelectionCalendarViewHeader.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIMultipleSelectionCalendarViewHeader.m; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendarViewHeader.m; sourceTree = "<group>"; };
+		16350E6F19E81E190028F527 /* FIMultipleSelectionCalendarViewFlowLayout.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIMultipleSelectionCalendarViewFlowLayout.h; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendarViewFlowLayout.h; sourceTree = "<group>"; };
+		16350E7019E81E190028F527 /* FIMultipleSelectionCalendarViewFlowLayout.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIMultipleSelectionCalendarViewFlowLayout.m; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendarViewFlowLayout.m; sourceTree = "<group>"; };
+		16350E7119E81E190028F527 /* FIMultipleSelectionCalendarViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = FIMultipleSelectionCalendarViewCell.h; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendarViewCell.h; sourceTree = "<group>"; };
+		16350E7219E81E190028F527 /* FIMultipleSelectionCalendarViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = FIMultipleSelectionCalendarViewCell.m; path = FIMultipleSelectionCalendar/FIMultipleSelectionCalendarViewCell.m; sourceTree = "<group>"; };
+		16350E7319E81E190028F527 /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -81,11 +94,9 @@
 		16350E3F19E81E050028F527 /* FIMultipleSelectionCalendarDemo */ = {
 			isa = PBXGroup;
 			children = (
-				16350E4419E81E050028F527 /* AppDelegate.h */,
-				16350E4519E81E050028F527 /* AppDelegate.m */,
-				16350E4719E81E050028F527 /* ViewController.h */,
-				16350E4819E81E050028F527 /* ViewController.m */,
-				16350E4A19E81E050028F527 /* Main.storyboard */,
+				16350E7B19E81E1E0028F527 /* Demo */,
+				16350E7C19E81E240028F527 /* FIMultipleSelectionCalendar */,
+				16350E7319E81E190028F527 /* Main.storyboard */,
 				16350E4D19E81E050028F527 /* Images.xcassets */,
 				16350E4F19E81E050028F527 /* LaunchScreen.xib */,
 				16350E4019E81E050028F527 /* Supporting Files */,
@@ -117,6 +128,33 @@
 				16350E5B19E81E050028F527 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		16350E7B19E81E1E0028F527 /* Demo */ = {
+			isa = PBXGroup;
+			children = (
+				16350E6619E81E190028F527 /* AppDelegate.h */,
+				16350E6719E81E190028F527 /* AppDelegate.m */,
+				16350E6819E81E190028F527 /* VC.h */,
+				16350E6919E81E190028F527 /* VC.m */,
+			);
+			name = Demo;
+			sourceTree = "<group>";
+		};
+		16350E7C19E81E240028F527 /* FIMultipleSelectionCalendar */ = {
+			isa = PBXGroup;
+			children = (
+				16350E6A19E81E190028F527 /* FIMultipleSelectionCalendar.h */,
+				16350E6B19E81E190028F527 /* FIMultipleSelectionCalendarView.h */,
+				16350E6C19E81E190028F527 /* FIMultipleSelectionCalendarView.m */,
+				16350E6D19E81E190028F527 /* FIMultipleSelectionCalendarViewHeader.h */,
+				16350E6E19E81E190028F527 /* FIMultipleSelectionCalendarViewHeader.m */,
+				16350E6F19E81E190028F527 /* FIMultipleSelectionCalendarViewFlowLayout.h */,
+				16350E7019E81E190028F527 /* FIMultipleSelectionCalendarViewFlowLayout.m */,
+				16350E7119E81E190028F527 /* FIMultipleSelectionCalendarViewCell.h */,
+				16350E7219E81E190028F527 /* FIMultipleSelectionCalendarViewCell.m */,
+			);
+			name = FIMultipleSelectionCalendar;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -199,7 +237,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16350E4C19E81E050028F527 /* Main.storyboard in Resources */,
+				16350E7A19E81E190028F527 /* Main.storyboard in Resources */,
 				16350E5119E81E050028F527 /* LaunchScreen.xib in Resources */,
 				16350E4E19E81E050028F527 /* Images.xcassets in Resources */,
 			);
@@ -219,8 +257,12 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				16350E4919E81E050028F527 /* ViewController.m in Sources */,
-				16350E4619E81E050028F527 /* AppDelegate.m in Sources */,
+				16350E7419E81E190028F527 /* AppDelegate.m in Sources */,
+				16350E7919E81E190028F527 /* FIMultipleSelectionCalendarViewCell.m in Sources */,
+				16350E7719E81E190028F527 /* FIMultipleSelectionCalendarViewHeader.m in Sources */,
+				16350E7519E81E190028F527 /* VC.m in Sources */,
+				16350E7619E81E190028F527 /* FIMultipleSelectionCalendarView.m in Sources */,
+				16350E7819E81E190028F527 /* FIMultipleSelectionCalendarViewFlowLayout.m in Sources */,
 				16350E4319E81E050028F527 /* main.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -244,14 +286,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		16350E4A19E81E050028F527 /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				16350E4B19E81E050028F527 /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		16350E4F19E81E050028F527 /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (

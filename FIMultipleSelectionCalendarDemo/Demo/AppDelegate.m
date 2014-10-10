@@ -1,13 +1,13 @@
 //
 //  AppDelegate.m
-//  FIMultipleSelectionCalendarDemo
+//  FIMultipleSelectionCalendarView
 //
-//  Created by Igor on 10.10.14.
-//  Copyright (c) 2014 Fedotov Igor. All rights reserved.
+//  Created by Igor on 30.09.14.
+//  Copyright (c) 2014 Fedotov.Igor. All rights reserved.
 //
 
 #import "AppDelegate.h"
-
+#import "FIMultipleSelectionCalendarView.h"
 @interface AppDelegate ()
 
 @end
@@ -41,5 +41,4 @@
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
-
 @end

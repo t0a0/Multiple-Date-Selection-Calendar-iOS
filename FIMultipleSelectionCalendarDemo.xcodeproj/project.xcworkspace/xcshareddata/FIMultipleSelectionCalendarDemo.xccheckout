@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>64BD6C66-C32A-4968-8040-3CD544411189</string>
+	<key>IDESourceControlProjectName</key>
+	<string>FIMultipleSelectionCalendarDemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>9098150E24095880B5295566B33C29A0B87B04A1</key>
+		<string>https://github.com/TrenboloneA/Multiple-Selection-Calendar-iOS.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>FIMultipleSelectionCalendarDemo.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>9098150E24095880B5295566B33C29A0B87B04A1</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/TrenboloneA/Multiple-Selection-Calendar-iOS.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>9098150E24095880B5295566B33C29A0B87B04A1</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>9098150E24095880B5295566B33C29A0B87B04A1</string>
+			<key>IDESourceControlWCCName</key>
+			<string>FIMultipleSelectionCalendarDemo</string>
+		</dict>
+	</array>
+</dict>
+</plist>

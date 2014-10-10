@@ -408,6 +408,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 #pragma mark - mark dates
 -(void)markDate:(NSDate*)date withType:(FIMSCCellMarkType)markType
 {
+    [self unmarkDate:date];
     NSMutableSet* newSet = [self.markedDates objectForKey:[self stringKeyForMarkType:markType]];
     if(!newSet)
     {
@@ -421,6 +422,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 }
 -(void)markDates:(NSSet*)dates withType:(FIMSCCellMarkType)markType
 {
+    [self unmarkDates:dates];
     NSMutableSet* newSet = [self.markedDates objectForKey:[self stringKeyForMarkType:markType]];
     if(!newSet)
     {

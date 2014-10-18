@@ -235,48 +235,38 @@ static NSString* viewReuseID_Header = @"headerReuseID";
         }
     }
 }
--(void)collectionView:(UICollectionView *)collectionView willDisplayCell:(UICollectionViewCell *)cell forItemAtIndexPath:(NSIndexPath *)indexPath
+-(void)collectionView:(UICollectionView *)collectionView willDisplaySupplementaryView:(UICollectionReusableView *)view forElementKind:(NSString *)elementKind atIndexPath:(NSIndexPath *)indexPath
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         if(!self.isLoading)
         {
             if(indexPath.section < sectionLimitBeforeLoadingMoreSections) // load @ beginning
             {
-#warning TO FIX Loads with lag, because of contentSize changing.
                 self.isLoading = YES;
-                CGFloat height = self.contentSize.height;
                 dispatch_async(dispatch_get_main_queue(), ^{
+
+                    [self loadNewMonthsAtTheBeginning:numberOfSectionsToLoadUponReachingTheLimit];
+                    NSIndexPath *oldIndexPath = self.indexPathsForVisibleItems[0];
+                    CGRect before = [self layoutAttributesForItemAtIndexPath:oldIndexPath].frame;
+                    CGPoint contentOffset = [self contentOffset];
+                    [self reloadData];
+                    NSIndexPath *newIndexPath = [NSIndexPath indexPathForItem:oldIndexPath.row inSection:oldIndexPath.section + numberOfSectionsToLoadUponReachingTheLimit];
+                    CGRect after = [self layoutAttributesForItemAtIndexPath:newIndexPath].frame;
+                    contentOffset.y += (after.origin.y - before.origin.y);
                     
-                    [self performBatchUpdates:^
-                     {
-                         [self loadNewMonthsAtTheBeginning:numberOfSectionsToLoadUponReachingTheLimit];
-                         
-                         [self insertSections:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, numberOfSectionsToLoadUponReachingTheLimit)]];
-                         
-                     }
-                                   completion:^(BOOL finished)
-                     {
-                         self.contentOffset = CGPointMake(self.contentOffset.x,self.contentOffset.y + self.contentSize.height - height);
-                         self.isLoading = NO;
-                     }];
+                    self.contentOffset = contentOffset;
+                    self.isLoading = NO;
                 });
-                
             }
             else if(indexPath.section > collectionView.numberOfSections - sectionLimitBeforeLoadingMoreSections) // load @ end
             {
                 self.isLoading = YES;
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    [self performBatchUpdates:^
-                     {
-                         [self loadNewMonthsAtTheEnd:numberOfSectionsToLoadUponReachingTheLimit];
-                         NSRange range = NSMakeRange(collectionView.numberOfSections, numberOfSectionsToLoadUponReachingTheLimit);
-                         
-                         [self insertSections:[NSIndexSet indexSetWithIndexesInRange:range]];
-                     }
-                                   completion:^(BOOL finished)
-                     {
-                         self.isLoading = NO;
-                     }];
+                    
+                    [self loadNewMonthsAtTheEnd:numberOfSectionsToLoadUponReachingTheLimit];
+                    [self reloadData];
+                    
+                    self.isLoading = NO;
                 });
                 
             }
@@ -429,28 +419,23 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 #pragma mark - mark dates
 -(void)markDate:(NSDate*)date withType:(FIMSCCellMarkType)markType
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSDate* dateFromComps = [self clearDateFromhhmmss:date];
-        for(NSString* key in self.markedDates.allKeys)
-        {
-            NSMutableSet* set = self.markedDates[key];
-            [set removeObject:dateFromComps];
-        }
-        NSMutableSet* newSet = [self.markedDates objectForKey:[self stringKeyForMarkType:markType]];
-        if(!newSet)
-        {
-            newSet = [NSMutableSet new];
-            [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
-        }
-        NSDate* dateToSelect = [self clearDateFromhhmmss:date];
-        [newSet addObject:dateToSelect];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self reloadItemsWithDates:@[dateToSelect]];
-        });
-        
-    });
+    
+    NSDate* dateFromComps = [self clearDateFromhhmmss:date];
+    for(NSString* key in self.markedDates.allKeys)
+    {
+        NSMutableSet* set = self.markedDates[key];
+        [set removeObject:dateFromComps];
+    }
+    NSMutableSet* newSet = [self.markedDates objectForKey:[self stringKeyForMarkType:markType]];
+    if(!newSet)
+    {
+        newSet = [NSMutableSet new];
+        [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
+    }
+    NSDate* dateToSelect = [self clearDateFromhhmmss:date];
+    [newSet addObject:dateToSelect];
+    
+    [self reloadItemsWithDates:@[dateToSelect]];
     
 }
 -(void)markDates:(NSSet*)dates withType:(FIMSCCellMarkType)markType
@@ -487,19 +472,14 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 }
 -(void)unmarkDate:(NSDate *)date
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        NSDate* dateFromComps = [self clearDateFromhhmmss:date];
-        for(NSString* key in self.markedDates.allKeys)
-        {
-            NSMutableSet* set = self.markedDates[key];
-            [set removeObject:dateFromComps];
-        }
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [self reloadItemsWithDates:@[dateFromComps]];
-        });
-    });
+    NSDate* dateFromComps = [self clearDateFromhhmmss:date];
+    for(NSString* key in self.markedDates.allKeys)
+    {
+        NSMutableSet* set = self.markedDates[key];
+        [set removeObject:dateFromComps];
+    }
+    
+    [self reloadItemsWithDates:@[dateFromComps]];
 }
 -(void)unmarkDates:(NSSet *)dates
 {

@@ -429,59 +429,96 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 #pragma mark - mark dates
 -(void)markDate:(NSDate*)date withType:(FIMSCCellMarkType)markType
 {
-    [self unmarkDate:date];
-    NSMutableSet* newSet = [self.markedDates objectForKey:[self stringKeyForMarkType:markType]];
-    if(!newSet)
-    {
-        newSet = [NSMutableSet new];
-        [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
-    }
-    NSDate* dateToSelect = [self clearDateFromhhmmss:date];
-    [newSet addObject:dateToSelect];
-    [self reloadItemsWithDates:@[dateToSelect]];
-}
--(void)markDates:(NSSet*)dates withType:(FIMSCCellMarkType)markType
-{
-    [self unmarkDates:dates];
-    NSMutableSet* newSet = [self.markedDates objectForKey:[self stringKeyForMarkType:markType]];
-    if(!newSet)
-    {
-        newSet = [NSMutableSet new];
-        [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
-    }
-    NSMutableArray* datesToUpdate = [NSMutableArray new];
-    for (NSDate* date in dates.allObjects)
-    {
-        NSDate* dateToSelect = [self clearDateFromhhmmss:date];
-        [newSet addObject:dateToSelect];
-        [datesToUpdate addObject:dateToSelect];
-    }
-    [self reloadItemsWithDates:datesToUpdate];
-}
--(void)unmarkDate:(NSDate *)date
-{
-    NSDate* dateFromComps = [self clearDateFromhhmmss:date];
-    for(NSString* key in self.markedDates.allKeys)
-    {
-        NSMutableSet* set = self.markedDates[key];
-        [set removeObject:dateFromComps];
-    }
-    [self reloadItemsWithDates:@[dateFromComps]];
-}
--(void)unmarkDates:(NSSet *)dates
-{
-    NSMutableArray* datesToUpdate = [NSMutableArray new];
-    for (NSDate* date in dates.allObjects)
-    {
-        NSDate* dateToSelect = [self clearDateFromhhmmss:date];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSDate* dateFromComps = [self clearDateFromhhmmss:date];
         for(NSString* key in self.markedDates.allKeys)
         {
             NSMutableSet* set = self.markedDates[key];
-            [set removeObject:dateToSelect];
+            [set removeObject:dateFromComps];
         }
-        [datesToUpdate addObject:dateToSelect];
-    }
-    [self reloadItemsWithDates:datesToUpdate];
+        NSMutableSet* newSet = [self.markedDates objectForKey:[self stringKeyForMarkType:markType]];
+        if(!newSet)
+        {
+            newSet = [NSMutableSet new];
+            [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
+        }
+        NSDate* dateToSelect = [self clearDateFromhhmmss:date];
+        [newSet addObject:dateToSelect];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self reloadItemsWithDates:@[dateToSelect]];
+        });
+        
+    });
+    
+}
+-(void)markDates:(NSSet*)dates withType:(FIMSCCellMarkType)markType
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        for (NSDate* date in dates.allObjects)
+        {
+            NSDate* dateToSelect = [self clearDateFromhhmmss:date];
+            for(NSString* key in self.markedDates.allKeys)
+            {
+                NSMutableSet* set = self.markedDates[key];
+                [set removeObject:dateToSelect];
+            }
+        }
+        NSMutableSet* newSet = [self.markedDates objectForKey:[self stringKeyForMarkType:markType]];
+        if(!newSet)
+        {
+            newSet = [NSMutableSet new];
+            [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
+        }
+        NSMutableSet* datesToUpdate = [NSMutableSet new];
+        for (NSDate* date in dates.allObjects)
+        {
+            NSDate* dateToSelect = [self clearDateFromhhmmss:date];
+            [newSet addObject:dateToSelect];
+            [datesToUpdate addObject:dateToSelect];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadItemsWithDates:datesToUpdate.allObjects];
+        });
+    });
+    
+}
+-(void)unmarkDate:(NSDate *)date
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        NSDate* dateFromComps = [self clearDateFromhhmmss:date];
+        for(NSString* key in self.markedDates.allKeys)
+        {
+            NSMutableSet* set = self.markedDates[key];
+            [set removeObject:dateFromComps];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [self reloadItemsWithDates:@[dateFromComps]];
+        });
+    });
+}
+-(void)unmarkDates:(NSSet *)dates
+{
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray* datesToUpdate = [NSMutableArray new];
+        for (NSDate* date in dates.allObjects)
+        {
+            NSDate* dateToSelect = [self clearDateFromhhmmss:date];
+            for(NSString* key in self.markedDates.allKeys)
+            {
+                NSMutableSet* set = self.markedDates[key];
+                [set removeObject:dateToSelect];
+            }
+            [datesToUpdate addObject:dateToSelect];
+        }
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self reloadItemsWithDates:datesToUpdate];
+        });
+    });
 }
 
 #pragma mark - Scroll to today
@@ -614,3 +651,4 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 }
 
 @end
+

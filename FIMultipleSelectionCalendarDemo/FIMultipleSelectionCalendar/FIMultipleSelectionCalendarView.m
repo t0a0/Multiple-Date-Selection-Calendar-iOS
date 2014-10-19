@@ -457,15 +457,13 @@ static NSString* viewReuseID_Header = @"headerReuseID";
             newSet = [NSMutableSet new];
             [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
         }
-        NSMutableSet* datesToUpdate = [NSMutableSet new];
         for (NSDate* date in dates.allObjects)
         {
             NSDate* dateToSelect = [self clearDateFromhhmmss:date];
             [newSet addObject:dateToSelect];
-            [datesToUpdate addObject:dateToSelect];
         }
         dispatch_async(dispatch_get_main_queue(), ^{
-            [self reloadItemsWithDates:datesToUpdate.allObjects];
+            [self reloadData];
         });
     });
     

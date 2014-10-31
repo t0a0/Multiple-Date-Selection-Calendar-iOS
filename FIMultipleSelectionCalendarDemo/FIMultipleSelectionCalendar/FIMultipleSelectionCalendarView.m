@@ -7,7 +7,6 @@
 //
 
 #import "FIMultipleSelectionCalendarView.h"
-
 #import "FIMultipleSelectionCalendar.h"
 
 //constants
@@ -69,6 +68,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
         self.todayDate = [self clearDateFromhhmmss:nowDate];
         NSDateComponents* comps = [[NSDateComponents alloc]init];
         [comps setYear:nowDateComponents.year];
+        NSInteger todayWeekday = 1;
         for (NSInteger i = nowDateComponents.month ; i < nowDateComponents.month + 1; i ++)
         {
             [comps setMonth:i];
@@ -78,6 +78,11 @@ static NSString* viewReuseID_Header = @"headerReuseID";
             NSRange range = [calendar rangeOfUnit:NSCalendarUnitDay inUnit:NSCalendarUnitMonth forDate:date];
             NSDateComponents* weekDayComp = [calendar components:calendarUnitComponents fromDate:date];
             NSInteger weekDay = [self convertWeekDay:weekDayComp.weekday];
+            
+            if(nowDateComponents.year == weekDayComp.year && nowDateComponents.month == weekDayComp.month)
+            {
+                todayWeekday = weekDay;
+            }
             
             NSInteger numberOfItemsInSection = range.length - 1 + weekDay;
             NSInteger mod = numberOfItemsInSection % 7;
@@ -98,14 +103,29 @@ static NSString* viewReuseID_Header = @"headerReuseID";
                 monthSectionDictKey_NumberOfItemsInSection,
                 monthSectionDictKey_RefDate]]];
         }
+        
         [self loadNewMonthsAtTheBeginning:numberOfSectionsToLoadUponReachingTheLimit];
         [self loadNewMonthsAtTheEnd:numberOfSectionsToLoadUponReachingTheLimit];
         
         self.dataSource = self;
         self.delegate = self;
         
-        NSInteger todayDayNumberInSection = nowDateComponents.day - 1 + [self convertWeekDay:nowDateComponents.weekday]-1;
-        [self scrollToItemAtIndexPath:[NSIndexPath indexPathForItem:todayDayNumberInSection inSection:self.monthsSections.count/2] atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+        NSInteger todayDayNumberInSection = nowDateComponents.day - 1 + [self convertWeekDay:todayWeekday]-1;
+        NSIndexPath* scrollToIP = [NSIndexPath indexPathForItem:todayDayNumberInSection inSection:self.monthsSections.count/2];
+        @try
+        {
+            [self scrollToItemAtIndexPath:scrollToIP atScrollPosition:UICollectionViewScrollPositionCenteredVertically animated:NO];
+        }
+        @catch (NSException *exception)
+        {
+//            DLog(@"Caught an exception: %@",exception);
+//            [Flurry logError:@"Calendar exception" message:@"In init : scrollToItem" exception:exception];
+        }
+        @finally
+        {
+            
+        }
+        
         [[NSNotificationCenter defaultCenter]addObserver:self selector:@selector(significantTimeChangedOccured:) name:UIApplicationSignificantTimeChangeNotification object:nil];
     }
     return self;
@@ -202,7 +222,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 -(void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath
 {
     NSDate* selectedDate = [self dateForItemAtIndexPath:indexPath];
-    DLog(@"User did tap on date: %@",[selectedDate descriptionWithLocale:[NSLocale systemLocale]]);
+    DLog(@"User did tap on date: %@",[selectedDate descriptionWithLocale:[NSLocale currentLocale]]);
     if(selectedDate)
     {
         if([self.selectedDates containsObject:selectedDate])
@@ -244,7 +264,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
             {
                 self.isLoading = YES;
                 dispatch_async(dispatch_get_main_queue(), ^{
-
+                    
                     [self loadNewMonthsAtTheBeginning:numberOfSectionsToLoadUponReachingTheLimit];
                     NSIndexPath *oldIndexPath = self.indexPathsForVisibleItems[0];
                     CGRect before = [self layoutAttributesForItemAtIndexPath:oldIndexPath].frame;
@@ -455,6 +475,7 @@ static NSString* viewReuseID_Header = @"headerReuseID";
         if(!newSet)
         {
             newSet = [NSMutableSet new];
+#warning тут ошибка, переделать на operation queue?
             [self.markedDates setObject:newSet forKey:[self stringKeyForMarkType:markType]];
         }
         for (NSDate* date in dates.allObjects)
@@ -498,7 +519,15 @@ static NSString* viewReuseID_Header = @"headerReuseID";
         });
     });
 }
-
+-(void)unmarkAllDates
+{
+    for(NSString* key in self.markedDates.allKeys)
+    {
+        NSMutableSet* set = [self.markedDates objectForKey:key];
+        [set removeAllObjects];
+    }
+    [self reloadData];
+}
 #pragma mark - Scroll to today
 -(void)scrollToTodayAnimated:(BOOL)animate
 {
@@ -629,4 +658,3 @@ static NSString* viewReuseID_Header = @"headerReuseID";
 }
 
 @end
-

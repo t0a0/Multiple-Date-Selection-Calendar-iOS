@@ -20,15 +20,20 @@
     [self.view addSubview:view];
     
     NSDate* nowDate = [NSDate date];
-    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*3] withType:1];
-    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*7]withType:2];
+//    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*3] withType:1];
+//    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*7]withType:2];
+//
+//    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*9]withType:1];
+//    
+//    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*17]withType:2];
+//    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*18]withType:1];
 
-    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*9]withType:1];
-    
-    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*17]withType:2];
-    [view markDate:[nowDate dateByAddingTimeInterval:24*60*60*18]withType:1];
-
-
+    NSMutableSet* ray = [NSMutableSet new];
+    for (NSInteger i = 0; i < 500; i++)
+    {
+        [ray addObject:[nowDate dateByAddingTimeInterval:24*60*60*i]];
+    }
+    [view markDates:ray withType:1];
 
 }
 -(BOOL)calendarView:(FIMultipleSelectionCalendarView *)calView shouldSelectDate:(NSDate *)date

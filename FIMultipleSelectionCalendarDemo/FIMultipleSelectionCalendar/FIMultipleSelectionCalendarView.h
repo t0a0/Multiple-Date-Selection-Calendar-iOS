@@ -53,7 +53,7 @@
 -(void)markDates:(NSSet*)dates withType:(FIMSCCellMarkType)markType;
 -(void)unmarkDate:(NSDate*)date;
 -(void)unmarkDates:(NSSet*)dates;
-
+-(void)unmarkAllDates;
 
 
 @property (strong,nonatomic) NSMutableSet* selectedDates;
